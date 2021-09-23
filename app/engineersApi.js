@@ -59,11 +59,6 @@ app.post('/engineers', async (req, res) => {
       }
     });
   }
-
-  const all = await Engineer.find({});
-  console.log(all);
-
-  return res.send();
 })
 
 app.get('/engineers/:engineerId', (req, res) => {
