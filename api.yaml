@@ -1,0 +1,142 @@
+openapi: "3.0.0"
+
+info:
+  version: "1.0.0"
+  title: Engineers API v1
+
+servers:
+  - url: http://0.0.0.0:8085/
+
+paths:
+  /engineers:
+    post:
+      summary: Birth a Engineer
+      operationId: createEngineer
+      tags:
+        - Engineer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Engineer"
+      responses:
+        '201':
+          description: Engineer was successfully birthed
+          headers:
+            Location:
+              description: Path to the newly-created Engineer
+              example: "/api/v1/engineers/982f5c0b-33c9-4d17-ba3c-d06c45f28ee3"
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Engineer"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+
+  /engineers/{engineerId}:
+    parameters:
+      - name: engineerId
+        in: path
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get Engineer
+      operationId: getEngineer
+      tags:
+        - Engineer
+      responses:
+        '200':
+          description: Engineer found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Engineer"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+    patch:
+      summary: Update Engineer
+      operationId: updateEngineer
+      tags:
+        - Engineer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Engineer"
+      responses:
+        '200':
+          description: Engineer was successfully modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Engineer"
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+    delete:
+      summary: Delete Engineer
+      operationId: deleteEngineer
+      tags:
+        - Engineer
+      responses:
+        '204':
+          description: Engineer was successfully shot
+        default:
+          $ref: "#/components/responses/ErrorResponse"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+            - BadRequest
+            - NotFound
+            - InternalServerError
+          example: BadRequest
+          description: Human-readable error type, corresponds to HTTP status
+        message:
+          type: string
+          example: No name found
+          description: Human-readable description of the error
+    Engineer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "982f5c0b-33c9-4d17-ba3c-d06c45f28ee3"
+        name:
+          type: string
+          example: Dev Devington
+          minLength: 1
+        team:
+          type: string
+          example: The A Team
+        skills:
+          type: array
+          description: List of skills that the Engineer has
+          items:
+            type: string
+            example: C#
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp of when this resource was created
+          example: "2020-09-20T14:34:23+10:00"
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp of when this resource was last updated
+          example: "2020-09-20T16:00:00+10:00"
+
+  responses:
+    ErrorResponse:
+      description: An error has occurred
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
