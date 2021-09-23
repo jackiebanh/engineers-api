@@ -1,0 +1,21 @@
+name: app-ocean-sensation
+services:
+- name: web
+  git:
+    repo_clone_url: "hhttps://github.com/jackiebanh/engineers-api"
+    branch: main
+  github:
+    repo: jackiebanh/engineers-api
+    branch: main
+    deploy_on_push: true
+  routes:
+  - path: /
+  envs:
+  - key: KEY
+    value: VALUE
+databases:
+- name: db-mongo-ocean-sensation
+  engine: MONGODB
+  production: true
+  cluster_name: cluster-ocean-sensation
+  db_name: db-mongo-ocean-sensation
