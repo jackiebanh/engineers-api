@@ -21,10 +21,9 @@ services:
   - key: DATABASE_NAME
     scope: RUN_AND_BUILD_TIME
     value: db-ocean-sensation
-  github:
+  git:
     branch: main
-    deploy_on_push: true
-    repo: jackiebanh/engineers-api
+    repo_clone_url: https://github.com/jackiebanh/engineers-api.git
   http_port: 8080
   instance_count: 1
   instance_size_slug: basic-xs
