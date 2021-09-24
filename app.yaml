@@ -2,12 +2,8 @@ name: app-ocean-sensation
 services:
 - name: web
   git:
-    repo_clone_url: "hhttps://github.com/jackiebanh/engineers-api"
+    repo_clone_url: https://github.com/jackiebanh/engineers-api.git
     branch: main
-  github:
-    repo: jackiebanh/engineers-api
-    branch: main
-    deploy_on_push: true
   routes:
   - path: /
   envs:
