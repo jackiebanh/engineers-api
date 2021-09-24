@@ -12,7 +12,7 @@ const engineerSchema = new mongoose.Schema({
   updatedAt: {type: Date, required: true}
 });
 
-mongoose.connect(`${process.env.DATABASE_URL}&tlsCAFile=./ca-certificate.crt}`)
+mongoose.connect(`${process.env.DATABASE_URL}&tlsCAFile=./ca-certificate.crt`)
 const Engineer = mongoose.model('Engineer', engineerSchema);
 
 // remove virtual _id and __v version fields
