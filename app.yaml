@@ -1,17 +1,28 @@
-name: app-ocean-sensation
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+databases:
+- engine: MONGO
+  production: true
+  cluster_name: db-cluster
+  db_name: db
+name: engineers-api
+region: sgp
 services:
-- name: web
-  git:
-    repo_clone_url: https://github.com/jackiebanh/engineers-api.git
+- environment_slug: node-js
+  envs:
+  - key: DATABASE_URL
+    scope: RUN_TIME
+    value: ${db.DATABASE_URL}
+  github:
     branch: main
+    deploy_on_push: true
+    repo: jackiebanh/engineers-api
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: basic-xs
+  name: engineers-api
   routes:
   - path: /
-  envs:
-  - key: KEY
-    value: VALUE
-databases:
-- name: db-mongo-ocean-sensation
-  engine: MONGODB
-  production: true
-  cluster_name: cluster-ocean-sensation
-  db_name: db-mongo-ocean-sensation
+  run_command: npm start
+  source_dir: /app
