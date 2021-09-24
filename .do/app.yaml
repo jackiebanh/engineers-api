@@ -1,0 +1,35 @@
+name: engineers-api
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+databases:
+- cluster_name: db-mongodb-sgp1-25654
+  engine: MONGODB
+  name: db-ocean-sensation
+  production: true
+  version: "4"
+region: sgp
+services:
+- environment_slug: node-js
+  envs:
+  - key: DATABASE_URL
+    scope: RUN_TIME
+    value: ${db-ocean-sensation.DATABASE_URL}
+  - key: CA_CERT
+    scope: RUN_AND_BUILD_TIME
+    value: ${db-ocean-sensation.CA_CERT}
+  - key: DATABASE_NAME
+    scope: RUN_AND_BUILD_TIME
+    value: db-ocean-sensation
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: jackiebanh/engineers-api
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: basic-xs
+  name: engineers-api
+  routes:
+  - path: /
+  run_command: echo "${CA_CERT}" > ca-certificate.crt && npm start
+  source_dir: /app

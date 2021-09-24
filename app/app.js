@@ -2,8 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 const app = express().use(express.json())
-//const port = process.env.PORT || 3000
-const port = 8080
+const port = process.env.PORT || 3000
 
 const engineerSchema = new mongoose.Schema({
   name: {type: String, required: [true, 'Name is required']},
