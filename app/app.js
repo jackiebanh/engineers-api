@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import redis from 'redis';
 
 const app = express().use(express.json())
 const port = process.env.PORT || 3000
@@ -12,7 +13,15 @@ const engineerSchema = new mongoose.Schema({
   updatedAt: {type: Date, required: true}
 });
 
-mongoose.connect(`${process.env.DATABASE_URL}&replicaSet=${process.env.DATABASE_NAME}&tlsCAFile=./ca-certificate.crt`)
+mongoose.connect(`${process.env.DATABASE_URL}&replicaSet=${process.env.DATABASE_NAME}&tlsCAFile=./ca-certificate.crt`);
+
+const publisher = redis.createClient(`${process.env.REDIS_URL}`);
+publisher.on('connect', function() {
+  console.log('Redis client connected');
+});
+
+
+
 const Engineer = mongoose.model('Engineer', engineerSchema);
 
 // remove virtual _id and __v version fields
@@ -56,6 +65,8 @@ app.post('/engineers', async (req, res) => {
         res.status(500).send(errorMessage('Internal Server Error', 'Issue with creating engineer'))
       } else {
         res.status(201).send(engineer);
+
+        publisher.publish("notification", "Engineer created")
       }
     });
   }
