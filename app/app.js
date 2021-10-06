@@ -65,8 +65,9 @@ app.post('/engineers', async (req, res) => {
         res.status(500).send(errorMessage('Internal Server Error', 'Issue with creating engineer'))
       } else {
         res.status(201).send(engineer);
+        console.log(`Engineer ${engineer.id} created`);
 
-        publisher.publish("notification", "Engineer created")
+        publisher.publish("notification", `Engineer ${engineer.id} created`)
       }
     });
   }
@@ -95,6 +96,8 @@ app.patch('/engineers/:engineerId', (req, res) => {
       if (engineer) {
         const updatedEngineer = await Engineer.findById(id).exec();
         res.status(200).send(updatedEngineer);
+
+        console.log(`Engineer ${id} updated`);
       } else {
         res.status(404).send(errorMessage('Not found', `No engineer with id '${id}' found`));
       }
@@ -108,7 +111,7 @@ app.delete('/engineers/:engineerId', (req, res) => {
   Engineer.findById(id, async (err, engineer) => {
     if (engineer) {
       await Engineer.deleteOne(engineer);
-      res.status(204).send("Engineer was successfully deleted");
+      res.status(204).send(`Engineer ${id} was successfully deleted`);
     } else {
       res.status(404).send(errorMessage('Not found', `No engineer with id '${id}' found`))
     }
@@ -116,5 +119,5 @@ app.delete('/engineers/:engineerId', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Example app listening on port ${port}`)
 })

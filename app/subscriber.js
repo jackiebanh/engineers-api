@@ -7,7 +7,7 @@ const port = process.env.PORT || 3000
 var subscriber = redis.createClient(`${process.env.REDIS_URL}`);
 
 subscriber.on("message", function (channel, message) {
- console.log("Message: " + message + " on channel: " + channel + " has arrived!");
+ console.log(`Event received: "${message}"`)
 });
 
 subscriber.subscribe("notification");
@@ -17,5 +17,5 @@ app.get('/ping', async (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Example app listening on port ${port}`)
 })
